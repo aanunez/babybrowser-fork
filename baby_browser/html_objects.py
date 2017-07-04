@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from baby_browser.css_objects import *
+from .css_objects import *
 
 CLASS = "class"
 ID = "id"
@@ -165,19 +165,5 @@ class DOM:
     def __repr__(self):
         return self.__str__()
 
-if __name__=="__main__":
-    html = Tag("html", None)
-    head = Tag("head", None)
-    title = Tag("title", None)
-    body = Tag("body", None)
-    dom = DOM()
-    dom.add_child(html)
-    dom.add_child(head)
-    dom.add_child(title)
-    dom.close_child()#title
-    dom.close_child()#head
-    dom.add_child(body)
-    dom.close_child()#body
-    dom.close_child()#html
-    print(dom)
+
 

@@ -6,8 +6,8 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from baby_browser.html_tokenizer import *
-from baby_browser.qt_html_renderer import *
+from .html_tokenizer import *
+from .qt_html_renderer import *
 #Address bar for inserting a URI
 #Back and forward buttons
 #Bookmarking options
@@ -16,6 +16,7 @@ from baby_browser.qt_html_renderer import *
 #Among those are the address bar, status bar and tool bar
 
 class Browser_Widget(QWidget):
+
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -258,6 +259,3 @@ class Browser_GUI:
     def render_dom(dom, htmlWidget):
         Browser_GUI.HTML_RENDER.render_dom(dom.root, htmlWidget, htmlWidget.widget.layout())
 
-
-if __name__=="__main__":
-    gui = Browser_GUI()

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import re
-from baby_browser.html_objects import *
-#Tokens
+from .html_objects import *
+
 t_OPENTAG = re.compile("\s*<(?P<tag>\w+)\s*(?P<attrs>[^>]+)?>")
 t_ATTRIBUTES = re.compile("(?P<attr_name>\w+)=\"(?P<attr_value>[^\"]+)\s*")
 t_CLOSETAG = re.compile("</(\w+)>")
 t_DATA = re.compile("[^<>]+")
 t_WHITESPACE = re.compile("\s+")
+
 #States
 BEFORE_HTML = "before html"
 BEFORE_HEAD = "before head"
@@ -16,12 +17,15 @@ AFTER_HEAD = "after head"
 IN_BODY = "in body"
 AFTER_BODY = "after body"
 AFTER_AFTER_BODY = "after after body"
+
 #Special HTML Tags
 BODY = "body"
 HTML = "html"
 HEAD = "head"
 STYLE = "style"
+
 class Html_Tokenizer:
+
     def handle_opentag(self, tag_str, attrs):
         #print("Found start tag:", tag_str, attrs)
         tag = Tag(tag_str)
@@ -31,9 +35,11 @@ class Html_Tokenizer:
         self.dom.add_child(tag)
         if tag.is_self_closing:
             self.handle_closetag(tag)
+
     def handle_closetag(self, tag):
         #print("Found end tag:", tag)
         self.dom.close_child()
+
     def handle_data(self, display_data, original_data):
         #print("Found data:", display_data)
         if self.current_state==IN_BODY:
@@ -42,16 +48,19 @@ class Html_Tokenizer:
             self.dom.add_text(data)
         else:
             self.dom.add_content(display_data)
+
     def p_opentag(self, match):
         tag = match.group("tag")
         attrs = match.group("attrs")
         self.set_opentag_state(tag)
         return tag, attrs, len(match.group(0))
+
     def p_opentag_attrs(self, tag, attrs):
         for match in re.finditer(t_ATTRIBUTES, attrs):
             attr_name = match.group("attr_name")
             attr_value = match.group("attr_value")
             tag.add_attr(attr_name, attr_value)
+
     def set_opentag_state(self, tag):
         if tag.lower()==HTML:
             self.current_state = BEFORE_HEAD
@@ -59,6 +68,7 @@ class Html_Tokenizer:
             self.current_state = IN_HEAD
         elif tag.lower()==BODY:
             self.current_state = IN_BODY
+
     def p_closetag(self, match):
         tag = match.group(1)
         if tag.lower()==HTML:
@@ -68,12 +78,14 @@ class Html_Tokenizer:
         elif tag.lower()==BODY:
             self.current_state = AFTER_BODY
         return tag, None, len(tag)
+
     def tokenize(self, html):
         index = 0
         self.dom = DOM()
         self.current_state = BEFORE_HTML
         while index<len(html):
             index = self.parse(html, index)
+
     def parse(self, html, index):
         add_to_index = 0
         opentag =  t_OPENTAG.match(html[index:])
@@ -97,22 +109,14 @@ class Html_Tokenizer:
         else:
             add_to_index = 1
         return add_to_index+index
+
     def p_data(self, data):
         data = self.remove_excess_whitespace(data)
         return data
+
     def remove_excess_whitespace(self, data):
         #split the data and remove empty strings
         data = filter(lambda x: x, re.split("\s", data))
         return " ".join(data)
 
-if __name__=="__main__":
-    import sys
-    import os
-    example_path = os.path.join("baby_browser", "Examples", sys.argv[1])
-    html_file = open(example_path, 'r')
-    html_str = "\n".join(list(html_file))
-    html_file.close()
-    #html_str = "<html>\n<head><title>Website Title</title></head>\n<body>\n<div id=\"bye\"class=\"hello world\">Hi</div>\n<img src=\"html5.gif\" alt=\"HTML5 Icon\" width=\"128\" height=\"128\">\n</body>\n</html>"
-    tokenizer = Html_Tokenizer()
-    tokenizer.tokenize(html_str)
-    print(tokenizer.dom)
+
