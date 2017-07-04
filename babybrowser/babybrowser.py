@@ -12,6 +12,7 @@ class BabyBrowser:
 
     BOOKMARK_FILE = os.path.join("babybrowser", "user", "bookmarks")
     if not os.path.isfile( BOOKMARK_FILE ):
+        os.makedirs(  os.path.join("babybrowser", "user") )
         shutil.copyfile( os.path.join("babybrowser", "default_bookmarks"),
                          os.path.join("babybrowser", "user", "bookmarks") )
     DEFAULT_CSS = os.path.join("babybrowser", "browser.css")
@@ -27,6 +28,13 @@ class BabyBrowser:
 
         with open(BabyBrowser.BOOKMARK_FILE, 'rb') as bookmarks_file:
             self.bookmarks = pickle.load(bookmarks_file)
+            #foo = [MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/master/baby_browser/Examples/paragraphs.html', 'Paragraphs Example'),
+            #MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/master/baby_browser/Examples/headers2.html', 'Header Example'),
+            #MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/master/baby_browser/Examples/image.html', 'Image Example'),
+            #MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/master/baby_browser/Examples/paragraphs_with_style.html', 'Head Styles Example'),
+            #MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/master/baby_browser/Examples/hr.html', 'HR Example'),
+            #MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/master/baby_browser/Examples/spaces_in_p.html', 'Spaces Example')]
+            #pickle.dump(foo, bookmarks_file, protocol=pickle.HIGHEST_PROTOCOL)
         with open(BabyBrowser.DEFAULT_CSS, 'r') as default_css:
             self.default_css = "".join(list(default_css))
 
@@ -100,8 +108,10 @@ class MenuWebPage:
         self.url = url
         self.icon = icon
         self.title = title
+
     def __str__(self):
         return "Title:{} Url:{}".format(self.title, self.url)
+
     def __repr__(self):
         return str(self)
 

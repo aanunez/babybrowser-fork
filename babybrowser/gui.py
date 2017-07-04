@@ -56,21 +56,21 @@ class Browser_Main_Widget(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        icon_path =  os.path.join("baby_browser", "images", "crib_background.png")
+        icon_path =  os.path.join("babybrowser", "images", "crib_background.png")
         self.setWindowIcon(QIcon(icon_path))
-        self.page_icon = QIcon(os.path.join("baby_browser", "images", "page.png"))
+        self.page_icon = QIcon(os.path.join("babybrowser", "images", "page.png"))
 
         #Tabs
         self.tabBar = QTabWidget()
         self.tabBar.tabCloseRequested.connect(self.removeTab)
-        close_icon_path = "baby_browser/images/close.png"
+        close_icon_path = "babybrowser/images/close.png"
         self.setStyleSheet("QTabBar::close-button { image: url("+close_icon_path+"); }")
         self.tabBar.setTabsClosable(True)
         self.tabBar.setMovable(True)
         self.setCentralWidget(self.tabBar)
 
         new_tab_button = QPushButton()
-        tab_icon_path =  os.path.join("baby_browser", "images", "new folder black.png")
+        tab_icon_path =  os.path.join("babybrowser", "images", "new folder black.png")
         new_tab_button.setToolTip('New Tab')
         new_tab_button.setIcon(QIcon(tab_icon_path))
         button_font = new_tab_button.font()
@@ -90,22 +90,22 @@ class Browser_Main_Widget(QMainWindow):
         self.urlBar = QLineEdit()
         self.urlBar.returnPressed.connect(self.fetch_url)
         submit_button = QPushButton()
-        submit_button.setIcon(QIcon(os.path.join("baby_browser", "images", "search.png")))
+        submit_button.setIcon(QIcon(os.path.join("babybrowser", "images", "search.png")))
         submit_button.clicked.connect(self.fetch_url)
         submit_button.setToolTip('Sumbit Url')
         #Back/Forward Buttons
         back_button = QPushButton()
-        back_button.setIcon(QIcon(os.path.join("baby_browser", "images", "back.png")))
+        back_button.setIcon(QIcon(os.path.join("babybrowser", "images", "back.png")))
         back_button.setToolTip('Back')
         back_button.clicked.connect(self.go_back)
         forward_button = QPushButton()
-        forward_button.setIcon(QIcon(os.path.join("baby_browser", "images", "forward.png")))
+        forward_button.setIcon(QIcon(os.path.join("babybrowser", "images", "forward.png")))
         forward_button.setToolTip('Forward')
         forward_button.clicked.connect(self.go_forward)
         #Favorites Button
         self.favorite_button = QPushButton()
-        self.fav_border_icon = QIcon(os.path.join("baby_browser", "images", "fav-border.png"))
-        self.fav_full_icon = QIcon(os.path.join("baby_browser", "images", "fav-full.png"))
+        self.fav_border_icon = QIcon(os.path.join("babybrowser", "images", "fav-border.png"))
+        self.fav_full_icon = QIcon(os.path.join("babybrowser", "images", "fav-full.png"))
 
         self.favorite_button.setIcon(self.fav_border_icon)
         self.favorite_button.setToolTip('Bookmark')
@@ -237,9 +237,9 @@ class Browser_GUI:
         self.app = QApplication(sys.argv)
         self.browser = browser
         # Load the default fonts
-        font_path_regular =  os.path.join("baby_browser", "fonts", "raleway", "Raleway-Regular.ttf")
-        font_path_bold =  os.path.join("baby_browser", "fonts", "raleway", "Raleway-Bold.ttf")
-        font_path_italic =  os.path.join("baby_browser", "fonts", "raleway", "Raleway-Italic.ttf")
+        font_path_regular =  os.path.join("babybrowser", "fonts", "raleway", "Raleway-Regular.ttf")
+        font_path_bold =  os.path.join("babybrowser", "fonts", "raleway", "Raleway-Bold.ttf")
+        font_path_italic =  os.path.join("babybrowser", "fonts", "raleway", "Raleway-Italic.ttf")
         font_db = QFontDatabase()
         font_db.addApplicationFont(font_path_regular)
         font_db.addApplicationFont(font_path_bold)
