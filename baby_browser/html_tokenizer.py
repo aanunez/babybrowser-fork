@@ -111,12 +111,9 @@ class Html_Tokenizer:
         return add_to_index+index
 
     def p_data(self, data):
-        data = self.remove_excess_whitespace(data)
-        return data
+        return self.remove_excess_whitespace(data)
 
     def remove_excess_whitespace(self, data):
-        #split the data and remove empty strings
-        data = filter(lambda x: x, re.split("\s", data))
-        return " ".join(data)
+        return " ".join( filter(lambda x: x, re.split("\s", data)) )
 
 

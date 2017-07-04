@@ -35,17 +35,17 @@ class CSS_Tokenizer:
                     self.add_render_element(element, declarations)
 
     def add_render_element(self, dom_element, declarations):
-            if dom_element:
-                if dom_element.css:
-                    render_object = dom_element.css
-                else:
-                    render_object = RenderObject(BoxStyle.BLOCK)
-                #print(dom_element.tag)
-                for match in re.finditer(t_DECLARATIONS, declarations):
-                    css_property =  match.group("property")
-                    css_value =  match.group("value")
-                    self.create_style(render_object, css_property, css_value)
-                dom_element.css = render_object
+        if dom_element:
+            if dom_element.css:
+                render_object = dom_element.css
+            else:
+                render_object = RenderObject(BoxStyle.BLOCK)
+            #print(dom_element.tag)
+            for match in re.finditer(t_DECLARATIONS, declarations):
+                css_property =  match.group("property")
+                css_value =  match.group("value")
+                self.create_style(render_object, css_property, css_value)
+            dom_element.css = render_object
 
     def get_dom_elements(self, selector, dom):
         root = dom.root
@@ -64,15 +64,15 @@ class CSS_Tokenizer:
         return elements
 
     def create_style(self, render_object, css_property, css_value):
-            for prop in render_object.properties:
-                if css_property in prop.properties:
-                    num_unit = re.match(t_NUM_UNIT, css_value)
-                    if num_unit:
-                        css_unit = CSSUnit(num_unit.group("value"), num_unit.group("unit"))
-                        #print("   Adding:",css_property,css_unit)
-                        prop.properties[css_property] = css_unit
-                    else:
-                        #print("   Adding:",css_property,css_value)
-                        prop.properties[css_property] = css_value
+        for prop in render_object.properties:
+            if css_property in prop.properties:
+                num_unit = re.match(t_NUM_UNIT, css_value)
+                if num_unit:
+                    css_unit = CSSUnit(num_unit.group("value"), num_unit.group("unit"))
+                    #print("   Adding:",css_property,css_unit)
+                    prop.properties[css_property] = css_unit
+                else:
+                    #print("   Adding:",css_property,css_value)
+                    prop.properties[css_property] = css_value
 
 

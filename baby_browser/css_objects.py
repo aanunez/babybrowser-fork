@@ -63,18 +63,10 @@ class Text:
 class CSS_Style:
 
     def get_set_properties(self):
-        result = {}
-        for key in self.properties:
-            if self.properties[key]:
-                result[key] = self.properties[key]
-        return result
+        return {k: v for k,v in self.properties if v}
 
     def __str__(self):
-        result = []
-        for key in self.properties:
-            if self.properties[key]:
-                result.append(key+":"+str(self.properties[key]))
-        return str(result)
+        return str([k+":"+str(v) for k,v in self.properties if v])
 
     def __repr__(self):
         return str(self)
