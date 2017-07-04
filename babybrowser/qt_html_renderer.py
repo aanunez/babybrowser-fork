@@ -70,7 +70,7 @@ class QT_HTML_Renderer:
         return hr
 
     def render_img(self, element):
-        element.content = Network.get_image(element.attrs["src"])
+        element.content = network_get_image(element.attrs["src"])
         image = QImage()
         image.loadFromData(element.content)
         label = QLabel()

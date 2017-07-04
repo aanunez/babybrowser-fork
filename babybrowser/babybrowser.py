@@ -10,17 +10,16 @@ import os
 
 class BabyBrowser:
 
-    BOOKMARK_FILE = os.path.join("baby_browser", "user", "bookmarks")
+    BOOKMARK_FILE = os.path.join("babybrowser", "user", "bookmarks")
     if not os.path.isfile( BOOKMARK_FILE ):
-        shutil.copyfile( os.path.join("baby_browser", "default_bookmarks"),
-                         os.path.join("baby_browser", "user", "bookmarks") )
-    DEFAULT_CSS = os.path.join("baby_browser", "browser.css")
+        shutil.copyfile( os.path.join("babybrowser", "default_bookmarks"),
+                         os.path.join("babybrowser", "user", "bookmarks") )
+    DEFAULT_CSS = os.path.join("babybrowser", "browser.css")
 
     def __init__(self):
         self.html_tokenizer = Html_Tokenizer()
         self.css_tokenizer = CSS_Tokenizer()
         self.gui = None
-        self.networking = Network()
         self.previous_pages = []
         self.forward_pages = []
         self.current_url = None
@@ -32,14 +31,11 @@ class BabyBrowser:
             self.default_css = "".join(list(default_css))
 
     def fetch_url(self, url, direction=None):
-        response = self.network_get(url)
+        response = network_get(url)
         if not direction and self.current_url and self.current_url!=url:
             self.previous_pages.append(self.current_url)
         self.current_url = url
         return self.tokenize_html(response)
-
-    def network_get(self, url):
-        return self.networking.get(url)
 
     def tokenize_html(self, html):
         self.html_tokenizer.tokenize(html)

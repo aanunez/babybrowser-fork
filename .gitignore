@@ -1,6 +1,6 @@
 # custom
 
-baby_browser/user/*
+babybrowser/user/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
