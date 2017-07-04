@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import re
 from baby_browser.css_objects import *
@@ -7,16 +9,20 @@ t_DECLARATIONS = re.compile("(?P<property>[\w-]+):\s*(?P<value>[\w-]+);")
 t_NUM_UNIT = re.compile("(?P<value>\d+)(?P<unit>pt|px)")
 t_SELECTOR_GROUPS = re.compile("\s*(?P<selector>[#\.\w\-\s_]+)\s*")
 t_SELECTOR = re.compile("\s*(?P<symbol>\.|#)?(?P<name>[\w-]+)\s*")
-                
+
 CLASS_SELECTOR = "."
 ID_SELECTOR = "#"
 TAG_SELECTOR = None
+
 class CSS_Tokenizer:
+
     def __init__(self):
         pass
+
     def tokenize(self, css_str, dom):
         for css in re.finditer(t_RULE, css_str):
-            self.parse(css, dom) 
+            self.parse(css, dom)
+
     def parse(self, css, dom):
         #print(css)
         if css:
@@ -27,6 +33,7 @@ class CSS_Tokenizer:
                 #print(elements)
                 for element in elements:
                     self.add_render_element(element, declarations)
+
     def add_render_element(self, dom_element, declarations):
             if dom_element:
                 if dom_element.css:
@@ -39,6 +46,7 @@ class CSS_Tokenizer:
                     css_value =  match.group("value")
                     self.create_style(render_object, css_property, css_value)
                 dom_element.css = render_object
+
     def get_dom_elements(self, selector, dom):
         root = dom.root
         elements = []
@@ -54,18 +62,19 @@ class CSS_Tokenizer:
             if not root:
                 return None
         return elements
+
     def create_style(self, render_object, css_property, css_value):
             for prop in render_object.properties:
                 if css_property in prop.properties:
                     num_unit = re.match(t_NUM_UNIT, css_value)
                     if num_unit:
-                        css_unit = CSSUnit(num_unit.group("value"), num_unit.group("unit")) 
-                        #print("   Adding:",css_property,css_unit) 
+                        css_unit = CSSUnit(num_unit.group("value"), num_unit.group("unit"))
+                        #print("   Adding:",css_property,css_unit)
                         prop.properties[css_property] = css_unit
                     else:
-                        #print("   Adding:",css_property,css_value) 
+                        #print("   Adding:",css_property,css_value)
                         prop.properties[css_property] = css_value
-                    
+
 if __name__=="__main__":
     from baby_browser.html_tokenizer import *
    # html_str = "<html>\n<head><title>Website Title</title></head>\n<body>\n<h1 class=\"hello\">Hi</h1>\n<h2 class=\"hello goodbye\">Yah!</h2>\n</body>\n</html>"

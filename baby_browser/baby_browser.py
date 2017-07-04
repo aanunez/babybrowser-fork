@@ -1,7 +1,9 @@
-from baby_browser.gui import * 
-from baby_browser.html_tokenizer import * 
-from baby_browser.css_tokenizer import * 
-from baby_browser.networking import * 
+#!/usr/bin/env python3
+
+from baby_browser.gui import *
+from baby_browser.html_tokenizer import *
+from baby_browser.css_tokenizer import *
+from baby_browser.networking import *
 import pickle
 import os
 class BabyBrowser:
@@ -29,20 +31,20 @@ class BabyBrowser:
         self.current_url = url
         return self.tokenize_html(response)
     def network_get(self, url):
-        return self.networking.get(url) 
+        return self.networking.get(url)
     def tokenize_html(self, html):
         self.html_tokenizer.tokenize(html)
         dom = self.html_tokenizer.dom
         #Default Browser Styles
-        self.css_tokenizer.tokenize(self.default_css, dom) 
+        self.css_tokenizer.tokenize(self.default_css, dom)
         #Style in Head
         style_elements = dom.find_children_by_tag("style")
         for element in style_elements:
-            self.css_tokenizer.tokenize(element.content, dom) 
+            self.css_tokenizer.tokenize(element.content, dom)
         print(dom)
         return dom
     def show_gui(self):
-        self.gui = Browser_GUI(self) 
+        self.gui = Browser_GUI(self)
     def go_back(self):
         if not self.previous_pages:
             return None
@@ -86,7 +88,7 @@ class MenuWebPage:
     def __repr__(self):
         return str(self)
 
-    
+
 
 if __name__=="__main__":
     browser = BabyBrowser()

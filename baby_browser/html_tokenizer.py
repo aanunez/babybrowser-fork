@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+
 import re
-from baby_browser.html_objects import * 
+from baby_browser.html_objects import *
 #Tokens
 t_OPENTAG = re.compile("\s*<(?P<tag>\w+)\s*(?P<attrs>[^>]+)?>")
 t_ATTRIBUTES = re.compile("(?P<attr_name>\w+)=\"(?P<attr_value>[^\"]+)\s*")
@@ -23,20 +25,20 @@ class Html_Tokenizer:
     def handle_opentag(self, tag_str, attrs):
         #print("Found start tag:", tag_str, attrs)
         tag = Tag(tag_str)
-        tag.parse_state = self.current_state 
+        tag.parse_state = self.current_state
         if attrs:
             self.p_opentag_attrs(tag, attrs)
-        self.dom.add_child(tag) 
+        self.dom.add_child(tag)
         if tag.is_self_closing:
             self.handle_closetag(tag)
     def handle_closetag(self, tag):
         #print("Found end tag:", tag)
-        self.dom.close_child() 
+        self.dom.close_child()
     def handle_data(self, display_data, original_data):
         #print("Found data:", display_data)
         if self.current_state==IN_BODY:
             data = Text(display_data, original_data)
-            data.parse_state = self.current_state 
+            data.parse_state = self.current_state
             self.dom.add_text(data)
         else:
             self.dom.add_content(display_data)
@@ -69,7 +71,7 @@ class Html_Tokenizer:
     def tokenize(self, html):
         index = 0
         self.dom = DOM()
-        self.current_state = BEFORE_HTML 
+        self.current_state = BEFORE_HTML
         while index<len(html):
             index = self.parse(html, index)
     def parse(self, html, index):
@@ -106,11 +108,11 @@ class Html_Tokenizer:
 if __name__=="__main__":
     import sys
     import os
-    example_path = os.path.join("baby_browser", "Examples", sys.argv[1]) 
+    example_path = os.path.join("baby_browser", "Examples", sys.argv[1])
     html_file = open(example_path, 'r')
     html_str = "\n".join(list(html_file))
     html_file.close()
     #html_str = "<html>\n<head><title>Website Title</title></head>\n<body>\n<div id=\"bye\"class=\"hello world\">Hi</div>\n<img src=\"html5.gif\" alt=\"HTML5 Icon\" width=\"128\" height=\"128\">\n</body>\n</html>"
     tokenizer = Html_Tokenizer()
-    tokenizer.tokenize(html_str) 
+    tokenizer.tokenize(html_str)
     print(tokenizer.dom)

@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 import sys
 import functools
 import os
-from PyQt5.QtWidgets import * 
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from baby_browser.html_tokenizer import *
@@ -12,10 +14,12 @@ from baby_browser.qt_html_renderer import *
 #Refresh and stop buttons for refreshing or stopping the loading of current documents
 #Home button that takes you to your home page
 #Among those are the address bar, status bar and tool bar
+
 class Browser_Widget(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+
     def initUI(self):
         #color background white
 
@@ -36,6 +40,7 @@ class Browser_Widget(QWidget):
         self.setLayout(scroll_layout)
         scroll_layout.setSizeConstraint(QLayout.SetMinimumSize)
         scroll_layout.setAlignment(Qt.AlignTop)
+
     def center(self):
         geometry = self.frameGeometry()
         center_point = QDesktopWidget().availableGeometry().center()
@@ -43,15 +48,16 @@ class Browser_Widget(QWidget):
         self.move(geometry.topLeft())
 
 class Browser_Main_Widget(QMainWindow):
+
     def __init__(self, browser=None):
         super().__init__()
         self.browser = browser
         self.initUI()
+
     def initUI(self):
         icon_path =  os.path.join("baby_browser", "images", "crib_background.png")
         self.setWindowIcon(QIcon(icon_path))
         self.page_icon = QIcon(os.path.join("baby_browser", "images", "page.png"))
-
 
         #Tabs
         self.tabBar = QTabWidget()
@@ -99,11 +105,11 @@ class Browser_Main_Widget(QMainWindow):
         self.favorite_button = QPushButton()
         self.fav_border_icon = QIcon(os.path.join("baby_browser", "images", "fav-border.png"))
         self.fav_full_icon = QIcon(os.path.join("baby_browser", "images", "fav-full.png"))
-        
+
         self.favorite_button.setIcon(self.fav_border_icon)
         self.favorite_button.setToolTip('Bookmark')
         self.favorite_button.clicked.connect(self.toggle_bookmark)
-        
+
         toolbar.addWidget(back_button)
         toolbar.addWidget(forward_button)
         toolbar.addSeparator()
@@ -111,7 +117,7 @@ class Browser_Main_Widget(QMainWindow):
         toolbar.addWidget(self.urlBar)
         toolbar.addSeparator()
         toolbar.addWidget(submit_button)
-        
+
         #Menu Bar
         mainMenu = self.menuBar()
         self.favMenu = mainMenu.addMenu('Bookmarks')
@@ -120,24 +126,28 @@ class Browser_Main_Widget(QMainWindow):
             action = self.create_bookmark(bookmark.url, bookmark.title)
             action.triggered.connect(functools.partial(self.fetch_url, bookmark.url))
             self.favMenu.addAction(action)
-        
+
         self.addDefaultTab()
-        
+
         self.setGeometry(100, 100, 1200, 1200)
         self.setWindowTitle('BabyBrowser')
+
     def removeTab(self, index, no_add=False):
         if self.tabBar.count()==1 and not no_add:
             self.addDefaultTab()
         widget = self.tabBar.widget(index)
         widget.deleteLater()
         self.tabBar.removeTab(index)
+
     def addDefaultTab(self):
         self.addTab("New Tab", Browser_Widget())
+
     def addTab(self, tabName, widget):
         self.tabBar.addTab(widget, tabName)
         self.tabBar.setCurrentWidget(widget)
         index = self.tabBar.currentIndex()
         self.tabBar.setTabIcon(index, self.page_icon)
+
     def fetch_url(self, url=None, direction=None):
         if not url:
             url = self.urlBar.text()
@@ -163,19 +173,23 @@ class Browser_Main_Widget(QMainWindow):
             Browser_GUI.render_dom(dom, widget)
             self.addTab(widget.title, widget)
             self.statusBar.showMessage("")
+
     def go_back(self):
         url = self.browser.go_back()
         if url:
             self.fetch_url(url, True)
+
     def go_forward(self):
         url = self.browser.go_forward()
         if url:
             self.fetch_url(url)
+
     def toggle_bookmark(self):
         if not self.browser.has_bookmark(self.browser.current_url):
             self.add_bookmark()
         else:
             self.remove_bookmark()
+
     def add_bookmark(self):
         url = self.browser.current_url
         tab_index = self.tabBar.currentIndex()
@@ -185,6 +199,7 @@ class Browser_Main_Widget(QMainWindow):
         action = self.create_bookmark(url, title)
         action.triggered.connect(lambda: self.fetch_url(url))
         self.favMenu.addAction(action)
+
     def create_bookmark(self, url, title=None, icon=None):
         if title:
             action = QAction(title, self)
@@ -197,6 +212,7 @@ class Browser_Main_Widget(QMainWindow):
         else:
             action.setIcon(self.page_icon)
         return action
+
     def remove_bookmark(self):
         url = self.browser.current_url
         tab_index = self.tabBar.currentIndex()
@@ -208,16 +224,18 @@ class Browser_Main_Widget(QMainWindow):
             if action.text()==url or action.text()==title:
                 self.favMenu.removeAction(action)
                 break
+
     def closeEvent(self, event):
         self.browser.on_close()
 
-            
 class Browser_GUI:
+
     HTML_RENDER = QT_HTML_Renderer()
+
     def __init__(self, browser=None):
         self.app = QApplication(sys.argv)
         self.browser = browser
-        # Load the default fonts 
+        # Load the default fonts
         font_path_regular =  os.path.join("baby_browser", "fonts", "raleway", "Raleway-Regular.ttf")
         font_path_bold =  os.path.join("baby_browser", "fonts", "raleway", "Raleway-Bold.ttf")
         font_path_italic =  os.path.join("baby_browser", "fonts", "raleway", "Raleway-Italic.ttf")
@@ -236,9 +254,10 @@ class Browser_GUI:
         self.widget = Browser_Main_Widget(browser)
         self.widget.show()
         sys.exit(self.app.exec_())
+
     def render_dom(dom, htmlWidget):
         Browser_GUI.HTML_RENDER.render_dom(dom.root, htmlWidget, htmlWidget.widget.layout())
-   
-        
+
+
 if __name__=="__main__":
     gui = Browser_GUI()

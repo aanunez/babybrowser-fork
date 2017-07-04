@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class RenderObject:
     def __init__(self, display):
         self.box_style = BoxStyle(display)
@@ -26,6 +28,7 @@ class CSSUnit:
         return "{}{}".format(self.value, self.unit)
     def __repr__(self):
         return str(self)
+
 class Text:
     CENTER = "center"
     LEFT = "left"
@@ -40,12 +43,13 @@ class Text:
     UPPERCASE = "uppercase"
     LOWERCASE = "lowercase"
     CAPITALIZE = "capitalize"
-    TRANSFORMS = [UPPERCASE, LOWERCASE, CAPITALIZE] 
+    TRANSFORMS = [UPPERCASE, LOWERCASE, CAPITALIZE]
     def __init__(self, color=None, align=None, decoration=None, transform=None):
         self.color = color
         self.align = align
         self.decoration = decoration
         self.transform = transform
+
 class CSS_Style:
     def get_set_properties(self):
         result = {}
@@ -61,7 +65,7 @@ class CSS_Style:
         return str(result)
     def __repr__(self):
         return str(self)
-        
+
 class Font(CSS_Style):
     #Property Names
     p_FONT_FAMILY = "font-family"
@@ -78,23 +82,27 @@ class Font(CSS_Style):
     def __init__(self):
         super().__init__()
         self.properties = {Font.p_FONT_FAMILY:None, Font.p_FONT_STYLE:None, Font.p_FONT_SIZE:None, Font.p_FONT_WEIGHT:None}
+
 class BoxStyleAttribute:
     def __init__(self, top=None, right=None, bottom=None, left=None):
         self.top = top
         self.right = right
         self.bottom = bottom
         self.left = left
+
 class Border:
     def __init__(self, top_border=None, right_border=None, bottom_border=None, left_border=None):
         self.style_top = top_border
         self.style_right = right_border
         self.style_bottom = bottom_border
         self.style_left = left_border
+
 class BorderStyle(BoxStyleAttribute):
     def __init__(self, top=None, right=None, bottom=None, left=None, style=None, color=None):
         super().__init__(top, right, bottom, left)
         self.style = style
         self.color = color
+
 class BoxStyle(CSS_Style):
     BLOCK = "block"
     INLINE = "inline"
