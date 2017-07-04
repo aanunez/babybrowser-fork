@@ -5,11 +5,15 @@ from .html_tokenizer import *
 from .css_tokenizer import *
 from .networking import *
 import pickle
+import shutil
 import os
 
 class BabyBrowser:
 
-    BOOKMARK_FILE = os.path.join("baby_browser", "bookmarks.txt")
+    BOOKMARK_FILE = os.path.join("baby_browser", "user", "bookmarks")
+    if not os.path.isfile( BOOKMARK_FILE ):
+        shutil.copyfile( os.path.join("baby_browser", "default_bookmarks"),
+                         os.path.join("baby_browser", "user", "bookmarks") )
     DEFAULT_CSS = os.path.join("baby_browser", "browser.css")
 
     def __init__(self):
@@ -20,11 +24,10 @@ class BabyBrowser:
         self.previous_pages = []
         self.forward_pages = []
         self.current_url = None
-        if os.stat(BabyBrowser.BOOKMARK_FILE).st_size!=0:
-            with open(BabyBrowser.BOOKMARK_FILE, 'rb') as bookmarks_file:
-                self.bookmarks = pickle.load(bookmarks_file)
-        else:
-            self.bookmarks = []
+        self.bookmark_write = False
+
+        with open(BabyBrowser.BOOKMARK_FILE, 'rb') as bookmarks_file:
+            self.bookmarks = pickle.load(bookmarks_file)
         with open(BabyBrowser.DEFAULT_CSS, 'r') as default_css:
             self.default_css = "".join(list(default_css))
 
@@ -81,17 +84,20 @@ class BabyBrowser:
         return None
 
     def add_bookmark(self, url, title=None, icon=None):
+        self.bookmark_write = True
         if not self.has_bookmark(url):
             self.bookmarks.append(MenuWebPage(url, title))
 
     def remove_bookmark(self, url):
+        self.bookmark_write = True
         if self.has_bookmark(url):
             index = self.index_of_bookmark(url)
             self.bookmarks.pop(index)
 
     def on_close(self):
-        with open(BabyBrowser.BOOKMARK_FILE, 'wb') as bookmarks_file:
-            pickle.dump(self.bookmarks, bookmarks_file, protocol=pickle.HIGHEST_PROTOCOL)
+        if self.bookmark_write:
+            with open(BabyBrowser.BOOKMARK_FILE, 'wb') as bookmarks_file:
+                pickle.dump(self.bookmarks, bookmarks_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 class MenuWebPage:
     def __init__(self, url, title=None, icon=None):
