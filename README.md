@@ -15,3 +15,7 @@ f = [MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/mas
      MenuWebPage('https://raw.githubusercontent.com/lauryndbrown/BabyBrowser/master/baby_browser/Examples/spaces_in_p.html', 'Spaces Example')]
 pickle.dump(f, bookmarks_file, protocol=pickle.HIGHEST_PROTOCOL)
 ```
+
+License:
+
+LB has not listed a anything on the main repo, so I am unable to correctly license my code for now.

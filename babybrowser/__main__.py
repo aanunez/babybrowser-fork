@@ -2,5 +2,9 @@
 
 from .babybrowser import *
 
-browser = BabyBrowser()
-browser.show_gui()
+def main():
+    browser = BabyBrowser()
+    browser.show_gui()
+
+if __name__ == "__main__":
+    main()
