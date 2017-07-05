@@ -14,11 +14,8 @@ class RenderObject:
             result.update(prop_result)
         return result
 
-    def __str__(self):
-        return str(self.properties)
-
     def __repr__(self):
-        return str(self)
+        return str(self.properties)
 
 class CSSUnit:
 
@@ -31,11 +28,8 @@ class CSSUnit:
         self.unit = unit
         self.value = int(value)
 
-    def __str__(self):
-        return "{}{}".format(self.value, self.unit)
-
     def __repr__(self):
-        return str(self)
+        return "{}{}".format(self.value, self.unit)
 
 class Text:
 
@@ -65,11 +59,8 @@ class CSS_Style:
     def get_set_properties(self):
         return {k: v for k,v in self.properties if v}
 
-    def __str__(self):
-        return str([k+":"+str(v) for k,v in self.properties if v])
-
     def __repr__(self):
-        return str(self)
+        return str([k+":"+str(v) for k,v in self.properties if v])
 
 class Font(CSS_Style):
 

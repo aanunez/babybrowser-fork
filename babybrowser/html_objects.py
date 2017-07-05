@@ -44,11 +44,8 @@ class Text(Html_Object):
         self.content = content
         self.original_text = original_text
 
-    def __str__(self):
-        return self.content
-
     def __repr__(self):
-        return self.__str__()
+        return self.content
 
 class Tag(Html_Object):
 
